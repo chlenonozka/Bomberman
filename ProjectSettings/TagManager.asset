@@ -3,7 +3,22 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Explosion
+  - Block
+  - FxTemporaire
+  - Bomb
+  - PickUp_Bomb
+  - SpeedBooster
+  - PickUp_SuperBomb
+  - PickUp_Shield
+  - Spear
+  - Crate
+  - Counter
+  - TotalText
+  - Explosion_super
+  - FallTrigger
+  - PickUp_Health
   layers:
   - Default
   - TransparentFX
@@ -11,9 +26,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Blocks
+  - Post
+  - SuperBlocks
   - 
   - 
   - 
