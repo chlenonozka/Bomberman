@@ -27,11 +27,19 @@ public class MenuManager : MonoBehaviour
             musicToggle.isOn = false;
         }
     }
-
+    public void GoToMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+    public void ShowHistory()
+    {
+        SceneManager.LoadScene("GameHistory");
+    }
     public void goToMulti()
     {
         SceneManager.LoadScene("MenuMultiPlayer");
     }
+    
 
     public void checkMusicOn()
     {
@@ -94,6 +102,10 @@ public class MenuManager : MonoBehaviour
     {
         ml.enabled = true;
         StartCoroutine(levelStartUp8());
+    }
+    public void chooseLevel()
+    {
+        SceneManager.LoadScene("LevelSelection");
     }
 
     private IEnumerator levelStartUp1()

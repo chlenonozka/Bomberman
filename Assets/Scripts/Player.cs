@@ -9,23 +9,19 @@ using static Unity.VisualScripting.Member;
 public class Player : MonoBehaviour
 {
     [Header("Mine Settings")]
-    public GameObject minePrefab; // Префаб мины
-    public int maxMines = 2; // Максимальное количество мин, которые может поставить игрок
-    private int currentMines = 0; // Текущее количество установленных мин
+    public GameObject minePrefab; 
+    public int maxMines = 2; 
+    private int currentMines = 0; 
     [Header("Slow Bomb")]
     public GameObject slowBombPrefab;
     private int lifes;
     public GlobalStateManager globalManager;
-    //Player parameters
-    [Range(1, 2)] //Enables a nifty slider in the editor
+    [Range(1, 2)] 
     public int playerNumber = 1;
-    //Indicates what player this is: P1 or P2
     public float moveSpeed = 4f;
     public float rotateSpeed = 1.0f;
     public bool canDropBombs = true;
-    //Can the player drop bombs?
     public bool canMove = true;
-    //Can the player move?
     public int bombsCount;
     public int healthCount;
     public Text bombsText;
@@ -37,7 +33,6 @@ public class Player : MonoBehaviour
     private bool playerTwoPressed;
 
     [Header("SuperBomb")]
-    //SuperBomb
     public GameObject superBombPrefab;
     public bool haveSuperBomb;
 
@@ -86,7 +81,7 @@ public class Player : MonoBehaviour
     public UnityEvent minusHealth;
     public UnityEvent plusHealth;
     
-    // Use this for initialization
+   
     void Start ()
     {
         loadLifesSettings();
@@ -95,7 +90,7 @@ public class Player : MonoBehaviour
             haveHealth = false;
         }
         else { haveHealth = true; }
-        //Cache the attached components for better performance and less typing
+        
         rigidBody = GetComponent<Rigidbody> ();
         myTransform = transform;
         playerModelTransform = myTransform.Find("PlayerModel").GetComponent<Transform>();
@@ -107,7 +102,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    
     void Update ()
     {
         if (gameEnd == false)
@@ -140,11 +135,11 @@ public class Player : MonoBehaviour
         animator.SetBool("Running", false);
 
         if (!canMove)
-        { //Return if player can't move
+        { 
             return;
         }
 
-        //Depending on the player number, use different input for moving
+        
         if (playerNumber == 1)
         {
             UpdatePlayer1Movement ();
@@ -164,9 +159,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Updates Player 1's movement and facing rotation using the WASD keys and drops bombs using Space
-    /// </summary>
+   
     private void UpdatePlayer1Movement ()
     {
         if (Input.GetKey (KeyCode.W) && playerOnePressed == false)
@@ -179,7 +172,7 @@ public class Player : MonoBehaviour
         else { playerOnePressed = false; }
 
         if (Input.GetKey (KeyCode.A) && playerOnePressed == false)
-        { //Left movement
+        { 
             playerOnePressed = true;
             rigidBody.velocity = new Vector3 (-moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
             myTransform.rotation = Quaternion.Euler (0, 270, 0);
@@ -188,7 +181,7 @@ public class Player : MonoBehaviour
         else { playerOnePressed = false; }
 
         if (Input.GetKey (KeyCode.S) && playerOnePressed == false)
-        { //Down movement
+        { 
             playerOnePressed = true;
             rigidBody.velocity = new Vector3 (rigidBody.velocity.x, rigidBody.velocity.y, -moveSpeed);
             myTransform.rotation = Quaternion.Euler(0, 180, 0);
@@ -197,7 +190,7 @@ public class Player : MonoBehaviour
         else { playerOnePressed = false; }
 
         if (Input.GetKey (KeyCode.D) && playerOnePressed == false)
-        { //Right movement
+        { 
             playerOnePressed = true;
             rigidBody.velocity = new Vector3 (moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
             myTransform.rotation = Quaternion.Euler(0, 90, 0);
@@ -206,12 +199,12 @@ public class Player : MonoBehaviour
         else { playerOnePressed = false; }
 
         if (canDropBombs && Input.GetKeyDown (KeyCode.Space))
-        { //Drop bomb
+        { 
             DropBomb ();
         }
 
         if (canDropBombs && Input.GetKeyDown(KeyCode.R) && haveSuperBomb)
-        { //Drop bomb
+        { 
             DropSuperBomb ();
         }
         if (canDropBombs && Input.GetKeyDown(KeyCode.Q)) // Замедленная бомба на Q
@@ -225,13 +218,11 @@ public class Player : MonoBehaviour
 
     }
 
-    /// <summary>
-    /// Updates Player 2's movement and facing rotation using the arrow keys and drops bombs using Enter or Return
-    /// </summary>
+    
     private void UpdatePlayer2Movement ()
     {
         if (Input.GetKey (KeyCode.UpArrow) && playerTwoPressed == false)
-        { //Up movement
+        { 
             playerTwoPressed = true;
             rigidBody.velocity = new Vector3 (rigidBody.velocity.x, rigidBody.velocity.y, moveSpeed);
             myTransform.rotation = Quaternion.Euler (0, 0, 0);
@@ -240,7 +231,7 @@ public class Player : MonoBehaviour
         else { playerTwoPressed = false; }
 
         if (Input.GetKey (KeyCode.LeftArrow) && playerTwoPressed == false)
-        { //Left movement
+        { 
             playerTwoPressed = true;
             rigidBody.velocity = new Vector3 (-moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
             myTransform.rotation = Quaternion.Euler (0, 270, 0);
@@ -249,7 +240,7 @@ public class Player : MonoBehaviour
         else { playerTwoPressed = false; }
 
         if (Input.GetKey (KeyCode.DownArrow) && playerTwoPressed == false)
-        { //Down movement
+        { 
             playerTwoPressed = true;
             rigidBody.velocity = new Vector3 (rigidBody.velocity.x, rigidBody.velocity.y, -moveSpeed);
             myTransform.rotation = Quaternion.Euler (0, 180, 0);
@@ -258,7 +249,7 @@ public class Player : MonoBehaviour
         else { playerTwoPressed = false; }
 
         if (Input.GetKey (KeyCode.RightArrow) && playerTwoPressed == false)
-        { //Right movement
+        { 
             playerTwoPressed = true;
             rigidBody.velocity = new Vector3 (moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
             myTransform.rotation = Quaternion.Euler (0, 90, 0);
@@ -267,14 +258,12 @@ public class Player : MonoBehaviour
         else { playerTwoPressed = false; }
 
         if (canDropBombs && (Input.GetKeyDown (KeyCode.KeypadEnter) || Input.GetKeyDown (KeyCode.Return)))
-        { //Drop Bomb. For Player 2's bombs, allow both the numeric enter as the return key or players 
-            //without a numpad will be unable to drop bombs
+        { 
             DropBomb ();
         }
 
         if (canDropBombs && haveSuperBomb && (Input.GetKeyDown(KeyCode.RightShift))) //Backslash
-        { //Drop Bomb. For Player 2's bombs, allow both the numeric enter as the return key or players 
-            //without a numpad will be unable to drop bombs
+        { 
             DropSuperBomb();
         }
         if (canDropBombs && Input.GetKeyDown(KeyCode.L)) // Замедленная бомба на L
@@ -288,10 +277,7 @@ public class Player : MonoBehaviour
 
     }
 
-    /// <summary>
-    /// Drops a bomb beneath the player
-    /// </summary>
-    /// 
+    
     private void DropSlowBomb()
     {
         if (slowBombPrefab && onTheBomb == false && bombsCount != 0)
@@ -449,7 +435,7 @@ public class Player : MonoBehaviour
     }
     private void PlaceMine()
     {
-        if (minePrefab && onTheBomb == false) // Проверяем, что префаб мины существует и игрок не стоит на бомбе
+        if (minePrefab && onTheBomb == false) 
         {
             currentMines++; // Увеличиваем счётчик установленных мин
             Vector3 minePosition = new Vector3(Mathf.RoundToInt(myTransform.position.x), 0, Mathf.RoundToInt(myTransform.position.z));
@@ -457,7 +443,7 @@ public class Player : MonoBehaviour
             Mine mineScript = mine.GetComponent<Mine>(); // Получаем скрипт мины
             if (mineScript != null)
             {
-                mineScript.SetOwner(this); // Устанавливаем владельца мины (чтобы мина знала, кто её поставил)
+                mineScript.SetOwner(this); 
             }
         }
     }

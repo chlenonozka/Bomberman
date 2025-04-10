@@ -50,11 +50,14 @@ public class GlobalStateManager : MonoBehaviour
 
         loadLifesSettings();
 
-        if(lifes == 0)
+        if (lifes == 0)
         {
             healthSpawner.enabled = false;
         }
-        else { healthSpawner.enabled = true; }
+        else
+        {
+            healthSpawner.enabled = true;
+        }
 
         LoadNickname();
     }
@@ -88,7 +91,8 @@ public class GlobalStateManager : MonoBehaviour
     {
         deadPlayers++;
 
-        if (deadPlayers == 1) {
+        if (deadPlayers == 1)
+        {
             deadPlayerNumber = playerNumber;
             Invoke("CheckPlayersDeath", .3f);
         }
@@ -96,6 +100,7 @@ public class GlobalStateManager : MonoBehaviour
 
     void CheckPlayersDeath()
     {
+        string winner = "";
         if (deadPlayers == 1)
         {
             endGame.Invoke();
@@ -106,10 +111,10 @@ public class GlobalStateManager : MonoBehaviour
                 endGamePanel.SetActive(true);
                 Cursor.visible = true;
                 endGamePanelText.text = player2_nickname + " победил!";
-                Debug.Log("Player 2 is the winner!");
                 counter.GetComponent<CounterManager>().winP2();
                 gameIsEnded = true;
                 fireworks.SetActive(true);
+                winner = player2_nickname;
             }
             else
             {
@@ -117,10 +122,10 @@ public class GlobalStateManager : MonoBehaviour
                 endGamePanel.SetActive(true);
                 Cursor.visible = true;
                 endGamePanelText.text = player1_nickname + " победил!";
-                Debug.Log("Player 1 is the winner!");
                 counter.GetComponent<CounterManager>().winP1();
                 gameIsEnded = true;
                 fireworks.SetActive(true);
+                winner = player1_nickname;
             }
         }
         else
@@ -134,10 +139,29 @@ public class GlobalStateManager : MonoBehaviour
             endGamePanelText.text = "Игра окончена ничьей!";
             Debug.Log("The game ended in a draw!");
             gameIsEnded = true;
+            winner = "Ничья";
         }
 
         counter.GetComponent<CounterManager>().inTotal();
         timerPaused = true;
+
+        SaveMatchResult(winner);
+    }
+
+    private void SaveMatchResult(string winner)
+    {
+        
+        int matchCount = PlayerPrefs.GetInt("MatchCount", 0);
+
+        
+        string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+        string matchData = $"{player1_nickname}|{player2_nickname}|{winner}|{timestamp}";
+
+        PlayerPrefs.SetString($"Match_{matchCount}", matchData);
+        PlayerPrefs.SetInt("MatchCount", matchCount + 1);
+        PlayerPrefs.Save();
+
+        Debug.Log($"Match saved: {matchData}, MatchCount: {matchCount + 1}");
     }
 
     private void offTexts()
